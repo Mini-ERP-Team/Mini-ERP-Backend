@@ -1,0 +1,126 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "./generated/prisma"
+}
+
+model NguoiDung {
+  idnguoidung  Int      @id @default(autoincrement())
+  matkhau      String
+  vaitro       String
+  hoten        String
+  mail         String   @unique
+  sdt          String?
+  ngaytaotk    DateTime @default(now())
+
+  donBans      DonBan[]
+  phieuNhaps   PhieuNhap[]
+  sanPhams     SanPham[]
+}
+
+model KhachHang {
+  idkhachhang  Int      @id @default(autoincrement())
+  tenkhachhang String
+  email        String   @unique
+  sdt          String?
+  diachi       String?
+
+  donBans      DonBan[]
+}
+
+model SanPham {
+  idsanpham    Int      @id @default(autoincrement())
+  tensanpham   String
+  thuonghieu   String?
+  mota         String?
+  
+  idnguoidung  Int
+  nguoiTao     NguoiDung @relation(fields: [idnguoidung], references: [idnguoidung])
+
+  phanLoais    PhanLoaiSanPham[]
+}
+
+model PhanLoaiSanPham {
+  idphanloai   Int      @id @default(autoincrement())
+  tenphanloai  String
+  gianhap      Float
+  giaban       Float
+  tonkho       Int      @default(0)
+  ngaycapnhat  DateTime @updatedAt
+
+  idsanpham    Int
+  sanPham      SanPham  @relation(fields: [idsanpham], references: [idsanpham])
+
+  chiTietDonBans   ChiTietDonBan[]
+  chiTietPhieuNhaps ChiTietPhieuNhap[]
+}
+
+model DonBan {
+  iddonban     Int      @id @default(autoincrement())
+  trangthai    String
+  ngaytao      DateTime @default(now())
+  ngayxacnhan  DateTime?
+  tongtien     Float
+
+  idnguoidung  Int
+  nguoiXacNhan NguoiDung @relation(fields: [idnguoidung], references: [idnguoidung])
+
+  idkhachhang  Int
+  khachHang    KhachHang @relation(fields: [idkhachhang], references: [idkhachhang])
+
+  chiTiet      ChiTietDonBan[]
+}
+
+model ChiTietDonBan {
+  iddonban     Int
+  idphanloai   Int
+  soluong      Int
+  giaban       Float
+  thanhtien    Float
+
+  donBan       DonBan          @relation(fields: [iddonban], references: [iddonban])
+  phanLoai     PhanLoaiSanPham @relation(fields: [idphanloai], references: [idphanloai])
+
+  @@id([iddonban, idphanloai])
+}
+
+model NhaCungCap {
+  idnhacungcap  Int      @id @default(autoincrement())
+  tennhacungcap String
+  email         String?
+  sdt           String?
+  diachi        String?
+
+  phieuNhaps    PhieuNhap[]
+}
+
+model PhieuNhap {
+  idphieunhap   Int      @id @default(autoincrement())
+  trangthai     String
+  ngaytao       DateTime @default(now())
+  tongtien      Float
+
+  idnguoidung   Int
+  nguoiLap      NguoiDung @relation(fields: [idnguoidung], references: [idnguoidung])
+
+  idnhacungcap  Int
+  nhaCungCap    NhaCungCap @relation(fields: [idnhacungcap], references: [idnhacungcap])
+
+  chiTiet       ChiTietPhieuNhap[]
+}
+
+model ChiTietPhieuNhap {
+  idphieunhap  Int
+  idphanloai   Int
+  soluong      Int
+  gianhap      Float
+  thanhtien    Float
+
+  phieuNhap    PhieuNhap       @relation(fields: [idphieunhap], references: [idphieunhap])
+  phanLoai     PhanLoaiSanPham @relation(fields: [idphanloai], references: [idphanloai])
+
+  @@id([idphieunhap, idphanloai])
+}
