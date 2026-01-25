@@ -1,8 +1,18 @@
 import express from 'express';
+import cors from 'cors'
+import dotenv from 'dotenv';
 import { prisma } from './lib/prisma.js';
+import rootRoutes from './routes/index.js';
 
+dotenv.config();
 const app = express();
-const PORT = 3000;
+const port = process.env.PORT || 3000;
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
 
 app.use(express.json());
 
@@ -15,6 +25,8 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server chạy tại http://localhost:${PORT}`);
+app.use('/api', rootRoutes);
+
+app.listen(port, () => {
+    console.log(`Server chạy tại http://localhost:${port}`);
 });
