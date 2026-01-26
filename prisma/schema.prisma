@@ -34,6 +34,8 @@ model KhachHang {
 model SanPham {
   idsanpham    Int      @id @default(autoincrement())
   tensanpham   String
+  danhmuc      String?
+  hinhanh      String?
   thuonghieu   String?
   mota         String?
   
@@ -45,6 +47,7 @@ model SanPham {
 
 model PhanLoaiSanPham {
   idphanloai   Int      @id @default(autoincrement())
+  sku          String?  @unique 
   tenphanloai  String
   gianhap      Float
   giaban       Float
