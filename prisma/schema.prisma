@@ -9,12 +9,19 @@ datasource db {
 
 model NguoiDung {
   idnguoidung  Int      @id @default(autoincrement())
+  manhanvien  String?  @unique
+  hoten        String
+  anhdaidien  String?
+  
   matkhau      String
   vaitro       String
-  hoten        String
   mail         String   @unique
   sdt          String?
+
+  trangthai   Boolean  @default(true)
+
   ngaytaotk    DateTime @default(now())
+  ngaycapnhat DateTime @default(now()) @updatedAt
 
   donBans      DonBan[]
   phieuNhaps   PhieuNhap[]
