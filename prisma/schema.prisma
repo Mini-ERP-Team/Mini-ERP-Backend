@@ -105,6 +105,7 @@ model ChiTietDonBan {
 
 model NhaCungCap {
   idnhacungcap  Int      @id @default(autoincrement())
+  manhacungcap  String?  @unique
   tennhacungcap String
   email         String?
   sdt           String?
@@ -115,8 +116,13 @@ model NhaCungCap {
 
 model PhieuNhap {
   idphieunhap   Int      @id @default(autoincrement())
-  trangthai     String
+  maphieu       String? @unique
+
+  trangthai     String   @default("PENDING")   
+
   ngaytao       DateTime @default(now())
+  ngaycapnhat   DateTime @updatedAt
+
   tongtien      Float
 
   idnguoidung   Int
