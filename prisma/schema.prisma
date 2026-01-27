@@ -107,6 +107,11 @@ model NhaCungCap {
   idnhacungcap  Int      @id @default(autoincrement())
   manhacungcap  String?  @unique
   tennhacungcap String
+
+  nguoiLienHe   String?
+  chucVu        String?
+  loaiHang      String?
+
   email         String?
   sdt           String?
   diachi        String?
