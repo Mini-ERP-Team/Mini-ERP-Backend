@@ -46,3 +46,14 @@ export const refreshToken = async (req: Request, res: Response) => {
       .json({ message: 'Phiên đăng nhập hết hạn, vui lòng đăng nhập lại' });
   }
 };
+
+export const logout = async (req: Request, res: Response) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+
+  // return res.status(200).json({ message: "Đăng xuất thành công" });
+  return res.status(204).send();
+};

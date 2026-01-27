@@ -21,6 +21,15 @@ export const loginUser = async (mail: string, matkhau: string) => {
     throw new Error('Mật khẩu không chính xác.');
   }
 
+    await prisma.nguoiDung.update({
+        where: { idnguoidung: user.idnguoidung },
+        data: {
+            lancuoidangnhap: new Date()
+        }
+    });
+
+    console.log("Cap nhat thanh cong!")
+
   const accessToken = jwt.sign(
     { id: user.idnguoidung, role: user.vaitro },
     SECRET_KEY,
