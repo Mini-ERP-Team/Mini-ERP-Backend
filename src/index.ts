@@ -9,12 +9,14 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('etag', false);
+
 app.use(cookieParser());
 
 app.use(
   cors({
     origin: 'http://localhost:5173',
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
   }),
 );
