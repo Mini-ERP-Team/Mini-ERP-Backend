@@ -7,6 +7,17 @@ datasource db {
   provider = "postgresql"
 }
 
+enum TrangThaiPhieu {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+enum TrangThaiDon {
+    PENDING
+    COMPLETED
+}
+
 model NguoiDung {
   idnguoidung  Int      @id @default(autoincrement())
   manhanvien  String?  @unique
@@ -64,7 +75,6 @@ model PhanLoaiSanPham {
   xuatxu      String?
 
   loaiChiTiet    String?
-  nhaCungCap     String?
   tuongThich     String?
   thongSoKyThuat String?
 
@@ -86,7 +96,11 @@ model DonBan {
   iddonban     Int      @id @default(autoincrement())
   madonhang    String?  @unique
 
-  trangthai    String
+  trangthai    TrangThaiDon @default(PENDING)
+
+  phuongthucTT  String?
+  trangthaiTT   String?
+
   ngaytao      DateTime @default(now())
   ngayxacnhan  DateTime?
   tongtien     Float
@@ -133,23 +147,26 @@ model NhaCungCap {
 }
 
 model PhieuNhap {
-  idphieunhap   Int      @id @default(autoincrement())
-  maphieu       String? @unique
+  idphieunhap  Int            @id @default(autoincrement())
+  maphieu      String?        @unique
 
-  trangthai     String   @default("PENDING")   
+  trangthai    TrangThaiPhieu @default(PENDING)
 
-  ngaytao       DateTime @default(now())
-  ngaycapnhat   DateTime @updatedAt
+  ngaytao      DateTime       @default(now())
+  ngaycapnhat  DateTime       @updatedAt
+  
+  ngayNhapKho  DateTime?
+  ghiChu       String? 
 
-  tongtien      Float
+  tongtien     Float
 
-  idnguoidung   Int
-  nguoiLap      NguoiDung @relation(fields: [idnguoidung], references: [idnguoidung])
+  idnguoidung  Int
+  nguoiLap     NguoiDung      @relation(fields: [idnguoidung], references: [idnguoidung])
 
-  idnhacungcap  Int
-  nhaCungCap    NhaCungCap @relation(fields: [idnhacungcap], references: [idnhacungcap])
+  idnhacungcap Int
+  nhaCungCap   NhaCungCap     @relation(fields: [idnhacungcap], references: [idnhacungcap])
 
-  chiTiet       ChiTietPhieuNhap[]
+  chiTiet      ChiTietPhieuNhap[]
 }
 
 model ChiTietPhieuNhap {
