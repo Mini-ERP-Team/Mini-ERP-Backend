@@ -43,9 +43,11 @@ model NguoiDung {
 model KhachHang {
   idkhachhang  Int      @id @default(autoincrement())
   tenkhachhang String
-  email        String   @unique
-  sdt          String?
-  diachi       String?
+  
+  sdt          String?   @unique
+  
+  ngaytao      DateTime @default(now())
+  diemtichluy  Int      @default(0)
 
   donBans      DonBan[]
 }
